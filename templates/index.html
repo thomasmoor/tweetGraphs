@@ -1,0 +1,101 @@
+<!docttype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tweet Graphs</title>
+</head>
+<body>
+  <form action="" method="post">
+  
+  <table borser="1">
+    <tr>
+      <td valign="middle"><h1>Tweet Graphs</h1></td>
+      <td> </td>
+      <td valign="middle">Search:</td>
+      <td><input type="text" name="keyword" /></td>
+      <td>User:</td>
+      <td><input type="text" name="user" /></td>
+      <td> </td>
+      <td align="right"><input type="submit" name="extract" value="Get Tweets"/></td>
+	</tr>
+	<tr>
+	  <td></td>
+	  <td></td>
+      <td valign="middle">Min Likes:</td>
+      <td><input type="text" name="min_likes" /></td>
+      <td valign="middle">Min Replies:</td>
+      <td><input type="text" name="min_replies" /></td>
+      <td valign="middle">Min Retweets:</td>
+      <td><input type="text" name="min_retweets" /></td>
+	</tr>
+	<tr>
+	  <td></td>
+	  <td></td>
+      <td valign="middle">Language:</td>
+      <td>
+	    <select name="lang" />
+		  <option value="en">English</option>
+		  <option value="de">Deutsch</option>
+		  <option value="fr">Francais</option>
+		  <option value="ru">Russki</option>
+		</select>
+	  </td>
+      <td valign="middle">Query:</td>
+      <td colspan="5"><input type="text" name="query" /></td>
+	</tr>
+  </table>
+
+  <!-- Graphs -->
+  <table border="0" width="100%" height="40%">
+    <tr>
+	  <td>
+        {% if word_graph %}
+		<div>
+	      <img src="data:image/png;base64, {{word_graph|safe}}" style="width: auto;height: 100%"/>
+		</div>
+        {% endif %}
+	  </td>
+	  <td>
+        {% if sentiment_graph %}
+	      <img src="data:image/png;base64, {{sentiment_graph|safe}}"/>
+        {% endif %}
+	  </td>
+	</tr>
+  </table>
+
+    <!-- Download button -->
+    <p><input type="submit" name="download" value="Download"/></p>
+
+
+  <!-- Data -->
+  <table border="1" width="100%">
+    <tr>
+	  <th>Date</th>
+	  <th>User</th>
+	  <th>Tweet</th>
+	  <th>Like</th>
+	  <th>Reply</th>
+	  <th>Retweet</th>
+	  
+	  <th>Polarity</th>
+	  <th>Subjectivity</th>
+	</tr>
+
+	{% for row in tweets %}
+    <tr>
+	  <td>{{ row['Date'] | replace('+00:00','') }}</td>
+	  <td>{{ row['User'] }}</td>
+	  <td>{{ row['Tweet'] }}</td>
+	  <td>{{ row['LikeCount'] }}</td>
+	  <td>{{ row['ReplyCount'] }}</td>
+	  <td>{{ row['RetweetCount'] }}</td>
+	  <td>{{ '%0.3f' % row['Sentiment'] }}</td>
+	  <td>{{ '%0.3f' % row['Subjectivity'] }}</td>
+	</tr>
+	{% endfor %}
+  </table>
+
+</form>
+</body>
+</html>
